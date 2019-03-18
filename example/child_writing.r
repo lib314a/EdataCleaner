@@ -2,7 +2,7 @@ rm(list = ls())
 
 INSTALLED <- require(rprime)
 if (!INSTALLED) install.package('rprime')
-source("~/definitions/getEdataValues.r")
+source("../getEdataValues.r")
 
 # Definitions ------------------------------------------------------------------
 extractSubjNum <- function(x)
