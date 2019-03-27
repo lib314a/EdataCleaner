@@ -2,7 +2,7 @@ rm(list = ls())
 
 INSTALLED <- require(rprime)
 if (!INSTALLED) install.package('rprime')
-source("../getEdataValues.r")
+source("~/definitions/getEdataValues.r")
 
 # Definitions ------------------------------------------------------------------
 extractSubjNum <- function(x)
@@ -46,6 +46,11 @@ convEdata <- function(subj, run, EDATA)
     , namePattern = "((vstimimg|wr[0-9]*tt|gs)[0-9]*\\.Duration|pinyintxt[0-9]*\\.OnsetToOnsetTime)$"
   )
 
+  # Get TTL
+  ttl <- as.integer(na.omit(
+    getEdataValues(r, namePattern = '^trigger.*RTTime$'))
+  )
+
   # Stack to dataframe
   rr <- data.frame(
     subject  = as.integer(subj)
@@ -55,6 +60,7 @@ convEdata <- function(subj, run, EDATA)
     , onset  = as.integer(onset)
 #    , offset = as.integer(offset)
     , dur    = duration
+    , ttl    = ttl
   )
 
   rr[!is.na(rr$stim), ]
@@ -78,6 +84,6 @@ OUT.df <- do.call(rbind, OUT)
 #############
 # WRITE CSV #
 #############
-write.csv(OUT.df[!is.na(OUT.df$code), ], file = 'OUT.df.csv')
+write.csv(OUT.df[!is.na(OUT.df$code), ], file = 'timings.csv')
 
 
